@@ -1,0 +1,42 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Model weight binaries and checkpoints (>100MB)
+*.pth
+*.pt
+*.bin
+*.onnx
+webapp/model/*
+!webapp/model/README.md
+
+# User uploads and generated thumbnails
+webapp/static/uploads/*
+!webapp/static/uploads/.gitkeep
+webapp/static/thumbnails/*
+!webapp/static/thumbnails/.gitkeep
+
+# Environment variables & secrets
+.env
+.env.*
+
+# Logs and OS files
+*.log
+log.txt
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project documentation & senior thesis assets (not needed for webapp evaluation)
+/DataDictionary/
+/FlowChart/
+/HierarchicalChart/
+/HowItWorks/
+/ProcessSpecification/
+/train/
+/UserInterfaceDesign/
+*.ipynb
+generate_notebook.py
+prompt.md

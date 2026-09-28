@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — ระบบตรวจจับวิดีโอดีปเฟก</title>
+    <meta name="description" content="แผงควบคุมระบบสำหรับผู้ดูแลระบบตรวจจับวิดีโอดีปเฟกใบหน้า">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="/static/css/style.css?v=4">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="admin-nav">
+            <a href="/" class="nav-brand">
+                <i class="fa-solid fa-shield-halved"></i>
+                ระบบตรวจจับดีปเฟก
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link"><i class="fa-solid fa-video"></i> หน้าตรวจจับ</a>
+                <a href="/admin" class="nav-link active"><i class="fa-solid fa-gauge-high"></i> Admin</a>
+                <button id="btnLogout" class="nav-link nav-logout" style="display:none;">
+                    <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
+                </button>
+            </div>
+        </nav>
+
+        <!-- Login Screen -->
+        <div class="admin-login-screen" id="loginScreen">
+            <div class="login-card">
+                <div class="login-icon">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h2>เข้าสู่ระบบผู้ดูแล</h2>
+                <p>กรุณาเข้าสู่ระบบเพื่อเข้าถึงแผงควบคุม Admin Dashboard</p>
+
+                <form id="loginForm" autocomplete="off">
+                    <div class="login-field">
+                        <label for="loginUsername"><i class="fa-solid fa-user"></i> ชื่อผู้ใช้</label>
+                        <input type="text" id="loginUsername" placeholder="Username" required>
+                    </div>
+                    <div class="login-field">
+                        <label for="loginPassword"><i class="fa-solid fa-lock"></i> รหัสผ่าน</label>
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                    </div>
+                    <div class="login-error" id="loginError" style="display:none;">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span id="loginErrorText">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</span>
+                    </div>
+                    <button type="submit" class="btn-login" id="btnLogin">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> เข้าสู่ระบบ
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard (Hidden until logged in) -->
+        <div class="admin-dashboard" id="dashboardScreen" style="display:none;">
+
+            <!-- Dashboard Header -->
+            <header class="dashboard-header">
+                <div>
+                    <h1><i class="fa-solid fa-gauge-high"></i> Admin Dashboard</h1>
+                    <p>ภาพรวมสถิติและการจัดการระบบตรวจจับวิดีโอดีปเฟก</p>
+                </div>
+                <div class="header-badge">
+                    <i class="fa-solid fa-user-shield"></i> ผู้ดูแลระบบ
+                </div>
+            </header>
+
+            <!-- Stats KPI Cards -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card stat-total">
+                    <div class="stat-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statTotalUploads">0</span>
+                        <span class="stat-label">วิดีโอทั้งหมด</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-fake">
+                    <div class="stat-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statTotalFake">0</span>
+                        <span class="stat-label">วิดีโอปลอมแปลง (Deepfake)</span>
+                        <span class="stat-pct" id="statFakePct">0%</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-real">
+                    <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statTotalReal">0</span>
+                        <span class="stat-label">วิดีโอจริง (Real)</span>
+                        <span class="stat-pct" id="statRealPct">0%</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-models">
+                    <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statActiveModels">0</span>
+                        <span class="stat-label">โมเดล AI พร้อมใช้งาน</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <!-- Donut Chart -->
+                <div class="panel chart-panel">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-chart-pie"></i> สัดส่วนผลการจำแนก</h2>
+                    </div>
+                    <div class="donut-chart-container" id="donutChartContainer">
+                        <canvas id="donutChart" width="220" height="220"></canvas>
+                        <div class="donut-center-text">
+                            <span class="donut-total" id="donutTotal">0</span>
+                            <span class="donut-sub">วิดีโอ</span>
+                        </div>
+                    </div>
+                    <div class="donut-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot legend-real"></span>
+                            วิดีโอจริง (Real) — <strong id="legendReal">0</strong>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot legend-fake"></span>
+                            วิดีโอปลอมแปลง (Fake) — <strong id="legendFake">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bar Chart: Daily Trend -->
+                <div class="panel chart-panel chart-panel-wide">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-chart-bar"></i> แนวโน้มการใช้งาน 7 วันล่าสุด</h2>
+                    </div>
+                    <div class="bar-chart-container">
+                        <canvas id="barChart" width="500" height="220"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="models">
+                    <i class="fa-solid fa-brain"></i> จัดการโมเดล AI
+                </button>
+                <button class="tab-btn" data-tab="history">
+                    <i class="fa-solid fa-clock-rotate-left"></i> ประวัติการตรวจจับ
+                </button>
+            </div>
+
+            <!-- Models Tab -->
+            <div class="tab-content active" id="tabModels">
+                <div class="panel">
+                    <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <h2><i class="fa-solid fa-brain"></i> โมเดล AI ที่ติดตั้งในระบบ</h2>
+                        <button class="btn-add-model" id="btnOpenAddModel">
+                            <i class="fa-solid fa-plus"></i> เพิ่มโมเดลใหม่
+                        </button>
+                    </div>
+
+                    <div class="models-grid" id="modelsGrid">
+                        <!-- Model cards populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-content" id="tabHistory" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการตรวจจับล่าสุด</h2>
+                        <p>บันทึกผลลัพธ์จากการวิเคราะห์วิดีโอทั้งหมด</p>
+                    </div>
+                    <div class="history-table-wrapper">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ชื่อไฟล์</th>
+                                    <th>ผลลัพธ์</th>
+                                    <th>ความมั่นใจ</th>
+                                    <th>Real %</th>
+                                    <th>Fake %</th>
+                                    <th>ความยาว</th>
+                                    <th>ความละเอียด</th>
+                                    <th>วันเวลา</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody">
+                                <!-- Rows populated dynamically -->
+                            </tbody>
+                        </table>
+                        <div class="empty-history" id="emptyHistory">
+                            <i class="fa-solid fa-inbox"></i>
+                            <p>ยังไม่มีประวัติการตรวจจับ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Model Modal -->
+    <div class="modal-overlay" id="addModelModal" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-plus-circle"></i> เพิ่มโมเดล AI ใหม่</h3>
+                <button class="modal-close" id="btnCloseModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="addModelForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Model Key <span class="required">*</span></label>
+                        <input type="text" id="modelKey" placeholder="เช่น faceswap" required>
+                        <small>ชื่อ key ภาษาอังกฤษ ไม่มีเว้นวรรค (ใช้ _ แทน)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>ชื่อแสดงผล <span class="required">*</span></label>
+                        <input type="text" id="modelName" placeholder="เช่น FaceSwap" required>
+                    </div>
+                    <div class="form-group">
+                        <label>คำอธิบาย</label>
+                        <input type="text" id="modelDescription" placeholder="คำอธิบายสั้นๆ เกี่ยวกับโมเดล">
+                    </div>
+                    <div class="form-group">
+                        <label>ไฟล์โมเดล (.pth) <span class="required">*</span></label>
+                        <div class="model-dropzone" id="modelDropzone">
+                            <input type="file" id="modelFileInput" accept=".pth" hidden>
+                            <div class="model-drop-prompt" id="modelDropPrompt">
+                                <i class="fa-solid fa-file-arrow-up"></i>
+                                <p>คลิกหรือลากวางไฟล์ .pth</p>
+                            </div>
+                            <div class="model-file-info" id="modelFileInfo" style="display:none;">
+                                <i class="fa-solid fa-file-circle-check"></i>
+                                <span id="modelFileName">-</span>
+                                <span id="modelFileSize">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="btnCancelModal">ยกเลิก</button>
+                    <button type="submit" class="btn-primary" id="btnSubmitModel">
+                        <i class="fa-solid fa-upload"></i> อัปโหลดโมเดล
+                    </button>
+                </div>
+            </form>
+            <!-- Upload Progress -->
+            <div class="upload-progress" id="uploadProgress" style="display:none;">
+                <div class="upload-progress-bar">
+                    <div class="upload-progress-fill" id="uploadProgressFill"></div>
+                </div>
+                <p id="uploadProgressText">กำลังอัปโหลด...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div class="modal-overlay" id="deleteModal" style="display:none;">
+        <div class="modal-card modal-small">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-trash-can"></i> ยืนยันการลบโมเดล</h3>
+                <button class="modal-close" id="btnCloseDeleteModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>คุณต้องการลบโมเดล <strong id="deleteModelName">-</strong> หรือไม่?</p>
+                <p class="text-warning"><i class="fa-solid fa-circle-exclamation"></i> การกระทำนี้ไม่สามารถย้อนกลับได้ ไฟล์โมเดลจะถูกลบออกจากระบบ</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="btnCancelDelete">ยกเลิก</button>
+                <button type="button" class="btn-danger" id="btnConfirmDelete">
+                    <i class="fa-solid fa-trash"></i> ลบโมเดล
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/admin.js?v=4"></script>
+</body>
+
+</html>

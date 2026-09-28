@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "key": "deepfakes",
+    "name": "Deepfakes",
+    "filename": "xception_Deepfakes.pth",
+    "description": "Xception model trained on Deepfakes dataset",
+    "is_active": true,
+    "created_at": "2026-09-09T20:28:22.564882"
+  },
+  {
+    "id": 2,
+    "key": "face2face",
+    "name": "Face2Face",
+    "filename": "xception_Face2Face.pth",
+    "description": "Xception model trained on Face2Face dataset",
+    "is_active": true,
+    "created_at": "2026-09-09T20:28:22.565049"
+  },
+  {
+    "id": 3,
+    "key": "faceshifter",
+    "name": "FaceShifter",
+    "filename": "xception_FaceShifter.pth",
+    "description": "Xception model trained on FaceShifter dataset",
+    "is_active": true,
+    "created_at": "2026-09-09T20:28:22.565051"
+  },
+  {
+    "id": 4,
+    "key": "neuraltextures",
+    "name": "NeuralTextures",
+    "filename": "xception_NeuralTextures.pth",
+    "description": "Xception model trained on NeuralTextures dataset",
+    "is_active": true,
+    "created_at": "2026-09-09T20:28:22.565054"
+  }
+]

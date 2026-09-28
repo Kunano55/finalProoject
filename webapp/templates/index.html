@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบตรวจจับวิดีโอดีปเฟกใบหน้าด้วยปัญญาประดิษฐ์</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="/static/css/style.css?v=4">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="admin-nav">
+            <a href="/" class="nav-brand">
+                <i class="fa-solid fa-shield-halved"></i>
+                ระบบตรวจจับดีปเฟก
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link active"><i class="fa-solid fa-video"></i> หน้าตรวจจับ</a>
+                <a href="/admin" class="nav-link"><i class="fa-solid fa-gauge-high"></i> Admin</a>
+            </div>
+        </nav>
+
+        <!-- Clean Header -->
+        <header class="clean-header">
+            <h1>ระบบตรวจจับวิดีโอดีปเฟกใบหน้าด้วยปัญญาประดิษฐ์</h1>
+            <p>Facial Deepfake Video Detection System Using Artificial Intelligence</p>
+        </header>
+
+        <!-- Main Layout Grid -->
+        <main class="main-layout">
+            <!-- Left Side: Upload Panel -->
+            <section class="panel upload-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดวิดีโอ</h2>
+                    <p>รองรับไฟล์ .mp4, .avi, .mov (ขนาดไม่เกิน 120MB)</p>
+                </div>
+
+
+                <!-- Dropzone Area -->
+                <div class="dropzone" id="dropzone">
+                    <input type="file" id="videoInput" accept="video/mp4,video/avi,video/quicktime,video/webm" hidden>
+                    <div class="dropzone-content" id="dropzonePrompt">
+                        <div class="upload-icon">
+                            <i class="fa-solid fa-film"></i>
+                        </div>
+                        <h3>คลิกหรือลากไฟล์วิดีโอมาวาง</h3>
+                        <p>.mp4, .avi, .mov (ความละเอียด 480p - 1080p)</p>
+                    </div>
+
+                    <!-- Video Preview Player -->
+                    <div class="video-preview-wrapper" id="previewWrapper" style="display: none;">
+                        <video id="videoPreview" controls></video>
+                        <button type="button" class="btn-remove-video" id="btnRemoveVideo" title="เปลี่ยนไฟล์">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <div class="file-info-bar">
+                            <span id="fileNameDisplay"><i class="fa-solid fa-file-video"></i> video.mp4</span>
+                            <span id="fileSizeDisplay">0 MB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analyze Button -->
+                <button type="button" class="btn-primary" id="btnAnalyze" disabled>
+                    <i class="fa-solid fa-magnifying-glass"></i> ตรวจสอบวิดีโอ
+                </button>
+
+                <!-- Processing State -->
+                <div class="processing-card" id="processingCard" style="display: none;">
+                    <div class="spinner"></div>
+                    <h3 id="statusHeading">กำลังประมวลผล...</h3>
+                    <p id="statusDetail">ระบบกำลังสกัดเฟรมและวิเคราะห์ด้วย AI</p>
+
+                    <div class="step-tracker">
+                        <div class="step-item active" id="step1">1. Upload</div>
+                        <div class="step-item" id="step2">2. MTCNN</div>
+                        <div class="step-item" id="step3">3. Xception</div>
+                        <div class="step-item" id="step4">4. Report</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Side: Results Panel -->
+            <section class="panel results-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-chart-line"></i> ผลการวิเคราะห์</h2>
+                    <p>เปอร์เซ็นต์ความน่าจะเป็นและความมั่นใจของโมเดล</p>
+                </div>
+
+                <!-- Initial Empty State -->
+                <div class="empty-results" id="emptyResults">
+                    <i class="fa-solid fa-chart-simple empty-icon"></i>
+                    <p>อัปโหลดวิดีโอและกดปุ่มตรวจสอบ เพื่อดูผลการวิเคราะห์</p>
+                </div>
+
+                <!-- Results Content (Initially Hidden) -->
+                <div class="results-content" id="resultsContent" style="display: none;">
+                    <!-- Verdict Main Banner -->
+                    <div class="verdict-banner" id="verdictBanner">
+                        <div class="verdict-text">
+                            <span class="verdict-sub">ผลการจำแนกประเภท</span>
+                            <h1 id="verdictTitle">--</h1>
+                            <p id="verdictDesc">--</p>
+                        </div>
+                        <div class="confidence-badge">
+                            <span class="conf-label">ความมั่นใจ</span>
+                            <span class="conf-value" id="confidenceValue">0.0%</span>
+                        </div>
+                    </div>
+
+                    <!-- Per-Model Ranking -->
+                    <div class="model-ranking-card">
+                        <div class="ranking-header">
+                            <h3><i class="fa-solid fa-ranking-star"></i> ผลจากแต่ละโมเดล (เรียงจากมากไปน้อย)</h3>
+                        </div>
+                        <div class="model-ranking-list" id="modelRankingList">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <!-- Video Meta Info Grid -->
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <span class="info-label">ความยาว</span>
+                            <span class="info-val" id="metaDuration">0s</span>
+                        </div>
+                        <div class="info-card">
+                            <span class="info-label">ความละเอียด</span>
+                            <span class="info-val" id="metaResolution">--</span>
+                        </div>
+                        <div class="info-card">
+                            <span class="info-label">เฟรมที่วิเคราะห์</span>
+                            <span class="info-val" id="metaAnalyzedFrames">0 เฟรม</span>
+                        </div>
+                        <div class="info-card">
+                            <span class="info-label">โมเดล</span>
+                            <span class="info-val" id="metaModel">Ensemble</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/js/main.js?v=4"></script>
+</body>
+
+</html>

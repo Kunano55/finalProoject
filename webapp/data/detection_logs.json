@@ -1,0 +1,80 @@
+[
+  {
+    "id": 6,
+    "filename": "000.mp4",
+    "is_fake": false,
+    "verdict": "REAL VIDEO",
+    "confidence": 97.0,
+    "real_pct": 97.0,
+    "fake_pct": 3.0,
+    "duration": "15.8s",
+    "resolution": "640x480",
+    "analyzed_frames": 12,
+    "timestamp": "2026-09-10T01:26:42.548151"
+  },
+  {
+    "id": 5,
+    "filename": "000_003.mp4",
+    "is_fake": true,
+    "verdict": "DEEPFAKE DETECTED",
+    "confidence": 67.6,
+    "real_pct": 32.4,
+    "fake_pct": 67.6,
+    "duration": "15.8s",
+    "resolution": "640x480",
+    "analyzed_frames": 12,
+    "timestamp": "2026-09-09T23:45:01.612405"
+  },
+  {
+    "id": 4,
+    "filename": "000_003.mp4",
+    "is_fake": true,
+    "verdict": "DEEPFAKE DETECTED",
+    "confidence": 59.7,
+    "real_pct": 40.3,
+    "fake_pct": 59.7,
+    "duration": "15.8s",
+    "resolution": "640x480",
+    "analyzed_frames": 12,
+    "timestamp": "2026-09-09T21:48:12.764376"
+  },
+  {
+    "id": 3,
+    "filename": "000_003.mp4",
+    "is_fake": true,
+    "verdict": "DEEPFAKE DETECTED",
+    "confidence": 59.7,
+    "real_pct": 40.3,
+    "fake_pct": 59.7,
+    "duration": "15.8s",
+    "resolution": "640x480",
+    "analyzed_frames": 12,
+    "timestamp": "2026-09-09T21:47:51.607454"
+  },
+  {
+    "id": 2,
+    "filename": "000_003.mp4",
+    "is_fake": true,
+    "verdict": "DEEPFAKE DETECTED",
+    "confidence": 59.7,
+    "real_pct": 40.3,
+    "fake_pct": 59.7,
+    "duration": "15.8s",
+    "resolution": "640x480",
+    "analyzed_frames": 12,
+    "timestamp": "2026-09-09T21:45:53.841094"
+  },
+  {
+    "id": 1,
+    "filename": "000_003.mp4",
+    "is_fake": true,
+    "verdict": "DEEPFAKE DETECTED",
+    "confidence": 59.7,
+    "real_pct": 40.3,
+    "fake_pct": 59.7,
+    "duration": "15.8s",
+    "resolution": "640x480",
+    "analyzed_frames": 12,
+    "timestamp": "2026-09-09T20:44:16.100925"
+  }
+]
