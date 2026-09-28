@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         addModelModal.style.display = 'none';
                         uploadProgress.style.display = 'none';
-                        uploadForm.reset();
+                        addModelForm.reset();
                         loadModels();
                         loadStats();
                     }, 800);
