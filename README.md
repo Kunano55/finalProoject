@@ -47,6 +47,8 @@ finalProject/
 │   └── templates/
 │       ├── index.html         # User detection interface
 │       └── admin.html         # Admin dashboard interface
+├── docs/
+│   └── Full_Proposal.pdf      # Complete Senior Project Proposal Document
 ├── .gitignore                 # Excludes heavy binaries, caches, and uploads
 └── README.md                  # Project documentation
 ```
